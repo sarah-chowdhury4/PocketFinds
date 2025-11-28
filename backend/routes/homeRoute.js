@@ -1,10 +1,10 @@
-// import express from 'express';
+import express from 'express';
 
-// const router = express.Router();
+const router = express.Router();
 
-// // routes
-// router.get('/', (req, res) => {
-//     res.status(200).json({message: 'Welcome to PocketFinds'})
-// })
+// routes
+router.get('/', (req, res) => {
+	res.status(200).json({ message: 'Welcome to PocketFinds' });
+});
 
-// export default router;
+export default router;

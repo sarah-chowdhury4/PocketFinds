@@ -29,4 +29,6 @@ const stallSchema = new mongoose.Schema({
     timestamps: true // shows created_at, updated_at time
 });
 
-module.exports = mongoose.model('Stall', stallSchema);
+const Stall = mongoose.model('Stall', stallSchema);
+
+export default Stall;

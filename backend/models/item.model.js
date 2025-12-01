@@ -25,4 +25,6 @@ const itemSchema = new mongoose.Schema({
     timestamps: true // shows created_at, updated_at time
 });
 
-module.exports = mongoose.model('Item', itemSchema);
+const Item = mongoose.model('Item', itemSchema);
+
+export default Item;

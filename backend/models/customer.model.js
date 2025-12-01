@@ -25,4 +25,6 @@ const customerSchema = new mongoose.Schema({
     timestamps: true // shows created_at, updated_at time
 });
 
-module.exports = mongoose.model('Customer', customerSchema);
+const Customer = mongoose.model('Customer', customerSchema);
+
+export default Customer;

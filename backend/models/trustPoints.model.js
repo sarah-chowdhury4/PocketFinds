@@ -17,4 +17,6 @@ const trustPointsSchema = new mongoose.Schema({
     timestamps: true // shows created_at, updated_at time
 });
 
-module.exports = mongoose.model('TrustPoints', trustPointsSchema);
+const TrustPoints = mongoose.model('TrustPoints', trustPointsSchema);
+
+export default TrustPoints;

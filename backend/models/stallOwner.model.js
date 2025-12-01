@@ -9,4 +9,6 @@ const stallOwnerSchema = new mongoose.Schema({
     timestamps: true // shows created_at, updated_at time
 });
 
-module.exports = mongoose.model('StallOwner', stallOwnerSchema);
+const StallOwner = mongoose.model('StallOwner', stallOwnerSchema);
+
+export default StallOwner;

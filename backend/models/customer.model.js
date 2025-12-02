@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import User from './user.model.js';
 
 const customerSchema = new mongoose.Schema({
     verified_status: {
@@ -25,6 +26,6 @@ const customerSchema = new mongoose.Schema({
     timestamps: true // shows created_at, updated_at time
 });
 
-const Customer = mongoose.model('Customer', customerSchema);
+const Customer = User.discriminator('customer', customerSchema);
 
 export default Customer;

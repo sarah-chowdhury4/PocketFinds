@@ -10,6 +10,8 @@ dotenv.config();
 // express app
 const app = express();
 
+app.use(express.json());
+
 // middleware
 app.use((req, res, next) => {
     console.log(req.path, req.method);

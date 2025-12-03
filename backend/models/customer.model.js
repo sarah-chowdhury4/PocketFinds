@@ -4,23 +4,28 @@ import User from './user.model.js';
 const customerSchema = new mongoose.Schema({
     verified_status: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     trust_points: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     bookmark: {
         type: [String],
-        required: false
+        required: false,
+        default: []
     },
     noti_on: {
         type: Boolean,
-        required: true
+        required: true,
+        default: true
     },
     badges: {
         type: [String],
-        required: false
+        required: false,
+        default: []
     }
 }, {
     timestamps: true // shows created_at, updated_at time

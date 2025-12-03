@@ -6,10 +6,10 @@ import validator from 'validator';
 const AutoIncrement = AutoIncrementFactory(mongoose);
 
 const userSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        unique: true
-    },
+    // id: {
+    //     type: Number,
+    //     unique: true
+    // },
     email: {
         type: String,
         required: true,
@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    type: {
+        type: String,
+        enum: ['customer', 'admin', 'stall owner'],
+        default: 'customer',
+        required: true
+    }
 }, {
     timestamps: true, // shows created_at, updated_at time
     discriminatorKey: 'type'

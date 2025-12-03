@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
 
 const feedbackSchema = new mongoose.Schema({
-    feedback_id: {
-        type: Number,
+    // feedback_id: {
+    //     type: Number,
+    //     required: true
+    // },
+    customer_id: {
+        type: String,
         required: true
     },
     review: {

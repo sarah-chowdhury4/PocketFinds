@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
 
 const stallSchema = new mongoose.Schema({
-    stall_id: {
-        type: Number,
+    // stall_id: {
+    //     type: Number,
+    //     required: true
+    // },
+    owner_id: {
+        type: String,
         required: true
     },
     stall_name: {
@@ -24,7 +28,9 @@ const stallSchema = new mongoose.Schema({
     offer: {
         type: String,
         required: false
-    }
+    },
+
+    items: [] // the menu
 }, {
     timestamps: true // shows created_at, updated_at time
 });

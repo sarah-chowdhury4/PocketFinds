@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
 const itemSchema = new mongoose.Schema({
-    item_id: {
-        type: String,
-        required: true
-    },
+    // item_id: {
+    //     type: String,
+    //     required: true
+    // },
     item_name: {
         type: String,
         required: true
@@ -18,6 +18,10 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
     item_category: {
+        type: String,
+        required: true
+    },
+    stall_id: {
         type: String,
         required: true
     }

@@ -43,13 +43,14 @@ const userSchema = new mongoose.Schema({
         required: true
     }
 }, {
-    timestamps: true // shows created_at, updated_at time
+    timestamps: true, // shows created_at, updated_at time
+    discriminatorKey: 'type'
 });
 
 userSchema.plugin(AutoIncrement, { inc_field: 'id' });
 
 // static sign up method
-userSchema.statics.signup = async function(email, password, first_name, last_name, phone) {
+userSchema.statics.signup = async function(email, password, first_name, last_name, phone, userType = 'customer') {
     // validation
     if (!email || !password || !first_name || !last_name) {
         throw Error('All fields except phone must be filled');
@@ -71,8 +72,8 @@ userSchema.statics.signup = async function(email, password, first_name, last_nam
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    // create new user
-    const user = await this.create({ email, password: hash, first_name, last_name, phone: phone || '' });
+    // create new user as a discriminator (default type 'customer')
+    const user = await this.create({ email, password: hash, first_name, last_name, phone: phone || '', type: userType });
     
     return user;
 }

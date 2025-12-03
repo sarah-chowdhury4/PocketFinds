@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectDB } from './controllers/db.js';  // Added .js extension for consistency
 import mongoose from 'mongoose';  // Changed from require to import
 import userRoutes from './routes/user.js';  // Changed from require to import, added .js
+import menuRoutes from './routes/menu.js';
 
 dotenv.config();
 
@@ -24,8 +25,23 @@ app.get('/', (req, res) => {
 });
 app.use('/api/user', userRoutes);
 
-// listen for requests
-app.listen(process.env.PORT, () => {
-    connectDB();
-    console.log('listening on port', process.env.PORT);
-});
+app.use('/api/menu', menuRoutes);
+
+// connect to db
+// gist: connect to db, if no error start listening for requests
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        // listen for requests
+        app.listen(process.env.PORT, () => {
+            console.log('DB connection sucessful!');
+            console.log('listening on port', process.env.PORT);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+
+
+
+
+

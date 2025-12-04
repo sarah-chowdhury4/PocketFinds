@@ -36,11 +36,6 @@ const userSchema = new mongoose.Schema({
         enum: ['customer', 'admin', 'stall owner'],
         default: 'customer',
         required: true
-    },
-    active: {
-        type: Boolean,
-        default: true,
-        required: true
     }
 }, {
     timestamps: true, // shows created_at, updated_at time

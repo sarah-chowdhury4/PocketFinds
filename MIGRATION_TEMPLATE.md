@@ -1,1 +1,0 @@
-Minimal notes removed.

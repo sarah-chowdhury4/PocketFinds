@@ -22,7 +22,8 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
     stall_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Stall',
         required: true
     }
 }, {

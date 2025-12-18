@@ -6,7 +6,7 @@ const feedbackSchema = new mongoose.Schema({
     //     required: true
     // },
     customer_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     review: {

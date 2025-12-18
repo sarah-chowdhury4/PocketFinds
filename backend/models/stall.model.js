@@ -6,7 +6,8 @@ const stallSchema = new mongoose.Schema({
     //     required: true
     // },
     owner_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     stall_name: {
@@ -28,9 +29,7 @@ const stallSchema = new mongoose.Schema({
     offer: {
         type: String,
         required: false
-    },
-
-    items: [] // the menu
+    }
 }, {
     timestamps: true // shows created_at, updated_at time
 });

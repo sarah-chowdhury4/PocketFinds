@@ -1,17 +1,16 @@
-import { useEffect, useState, useMemo } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import axios from "axios"
 import { DashboardSidebar } from "../components/dashboard/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Store, MapPin, Star, Search } from "lucide-react"
+import axios from "axios"
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000'
 
-export default function TopRated() {
+export default function BrowseStalls() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
   const [stalls, setStalls] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -21,61 +20,26 @@ export default function TopRated() {
 
   const fetchStalls = async () => {
     try {
-      setLoading(true)
-      setError("")
       const response = await axios.get(`${API_BASE_URL}/api/stall`)
-      const stallsData = response.data.stalls || []
-
-      // Fetch per-stall rating details
-      const withRatings = await Promise.all(
-        stallsData.map(async (stall) => {
-          try {
-            const detail = await axios.get(`${API_BASE_URL}/api/stall/${stall._id}`)
-            return {
-              ...stall,
-              avgRating: detail.data?.avgRating ?? 0,
-              totalReviews: detail.data?.totalReviews ?? 0,
-            }
-          } catch (e) {
-            return { ...stall, avgRating: 0, totalReviews: 0 }
-          }
-        })
-      )
-
-      setStalls(withRatings)
-    } catch (err) {
-      setError("Failed to load stalls")
+      setStalls(response.data.stalls || [])
+    } catch (error) {
+      console.error('Failed to fetch stalls:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const getRating = (stall) => {
-    const rating = stall?.avgRating ?? stall?.averageRating ?? stall?.rating ?? 0
-    return Number(rating) || 0
-  }
-
-  const sorted = useMemo(() => {
-    return [...stalls]
-      .map((s) => ({ ...s, __rating: getRating(s) }))
-      .sort((a, b) => b.__rating - a.__rating)
-  }, [stalls])
-
-  const filtered = sorted.filter((stall) => {
-    const name = stall.stall_name || ""
-    const location = stall.stall_location || ""
-    return (
-      name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      location.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  })
+  const filteredStalls = stalls.filter((stall) =>
+    stall.stall_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    stall.stall_location.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading top rated stalls...</p>
+          <p className="mt-4 text-muted-foreground">Loading stalls...</p>
         </div>
       </div>
     )
@@ -88,16 +52,11 @@ export default function TopRated() {
       <main className={sidebarCollapsed ? "lg:pl-[72px]" : "lg:pl-64"}>
         <div className="p-6 space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">Top Rated Stalls</h1>
-            <p className="text-muted-foreground">Highest-rated stalls based on community feedback</p>
+            <h1 className="text-3xl font-bold">Browse Stalls</h1>
+            <p className="text-muted-foreground">Discover food stalls near you</p>
           </div>
 
-          {error && (
-            <Card className="border-red-200 bg-red-50">
-              <CardContent className="py-4 text-red-700">{error}</CardContent>
-            </Card>
-          )}
-
+          {/* Search Bar */}
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -109,9 +68,10 @@ export default function TopRated() {
             />
           </div>
 
-          {filtered.length > 0 ? (
+          {/* Stalls Grid */}
+          {filteredStalls.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((stall) => (
+              {filteredStalls.map((stall) => (
                 <Link key={stall._id} to={`/stall/${stall._id}`}>
                   <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                     <CardHeader>
@@ -143,10 +103,6 @@ export default function TopRated() {
                         <span className="text-sm text-muted-foreground">
                           By {stall.owner_id?.first_name} {stall.owner_id?.last_name}
                         </span>
-                        <span className="flex items-center gap-1 text-sm">
-                          <Star className="h-4 w-4 text-amber-500" />
-                          {getRating(stall).toFixed(1)}
-                        </span>
                       </div>
                     </CardContent>
                   </Card>
@@ -155,8 +111,10 @@ export default function TopRated() {
             </div>
           ) : (
             <Card>
-              <CardContent className="py-12 text-center text-muted-foreground">
-                No stalls available.
+              <CardContent className="py-12">
+                <p className="text-center text-muted-foreground">
+                  {searchTerm ? 'No stalls found matching your search' : 'No stalls available'}
+                </p>
               </CardContent>
             </Card>
           )}

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Card, CardContent } from "../components/ui/card"
 import { Button } from "../components/ui/button"
-import { Star, MapPin, Store, ChevronRight, Compass } from "lucide-react"
+import { Star, MapPin, Store, ChevronRight, Compass, LayoutDashboard, Moon, Sun } from "lucide-react"
 import axios from "axios"
+import { useAuth } from "../lib/auth-context"
+import { useTheme } from "../lib/theme-context"
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000'
 
@@ -12,6 +14,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const navigate = useNavigate()
+  const { user, token } = useAuth()
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     fetchStalls()
@@ -57,7 +61,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex flex-col">
       {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border shadow-sm">
+      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo/Brand */}
@@ -71,6 +75,14 @@ export default function Home() {
 
             {/* Nav Buttons */}
             <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="font-medium"
+              >
+                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+              </Button>
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/discover')}
@@ -87,19 +99,31 @@ export default function Home() {
                 <MapPin className="h-4 w-4 mr-2" />
                 Map
               </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/login')}
-                className="font-medium"
-              >
-                Login
-              </Button>
-              <Button 
-                onClick={() => navigate('/signup')}
-                className="font-medium"
-              >
-                Sign Up
-              </Button>
+              {token ? (
+                <Button 
+                  onClick={() => navigate('/dashboard')}
+                  className="font-medium"
+                >
+                  <LayoutDashboard className="h-4 w-4 mr-2" />
+                  Dashboard
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => navigate('/login')}
+                    className="font-medium"
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    onClick={() => navigate('/signup')}
+                    className="font-medium"
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -111,7 +135,7 @@ export default function Home() {
           Discover Amazing Food Stalls
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Find the best local food stalls, read honest reviews, and share your dining experiences with the community.
+          Find the best stalls in Pocket Gate!
         </p>
       </section>
 
@@ -158,7 +182,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-border py-8">
+      <footer className="bg-background border-t border-border py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-foreground">
@@ -216,7 +240,7 @@ function StallCard({ stall, rating }) {
         {/* Rating Badge */}
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-md">
           <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-          <span className="text-sm font-semibold">
+          <span className="text-sm font-semibold text-gray-900">
             {rating?.avgRating || '0.0'}
           </span>
         </div>

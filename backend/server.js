@@ -36,7 +36,7 @@ const app = express();
 
 // CORS middleware - allow frontend to connect
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://44.192.98.90:3000', 'http://localhost:3000'],
     credentials: true
 }));
 

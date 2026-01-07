@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+frontend/build/
+
+# Environment variables (IMPORTANT - contains secrets)
+# .env
+# .env.local
+# .env.*.local
+# backend/.env
+# frontend/.env
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.orig
+node_modules
+frontend/build
+frontend/node_modules
+backend/__pycache__/
+backend/node_modules
+node_modules
+node_modules
+node_modules
+node_modules

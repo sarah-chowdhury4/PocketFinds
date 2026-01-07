@@ -1,5 +1,6 @@
 // importing
 import express from 'express';
+import cors from 'cors';
 import dotenv from "dotenv";
 import { connectDB } from './controllers/db.js';  // Added .js extension for consistency
 import mongoose from 'mongoose';  // Changed from require to import
@@ -10,6 +11,12 @@ dotenv.config();
 
 // express app
 const app = express();
+
+// Enable CORS for frontend
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true
+}));
 
 app.use(express.json());
 
@@ -40,8 +47,3 @@ mongoose.connect(process.env.MONGO_URI)
     .catch((error) => {
         console.log(error);
     })
-
-
-
-
-

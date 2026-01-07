@@ -29,7 +29,9 @@ const stallSchema = new mongoose.Schema({
     offer: {
         type: String,
         required: false
-    }
+    },
+
+    items: [] // the menu
 }, {
     timestamps: true // shows created_at, updated_at time
 });

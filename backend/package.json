@@ -18,9 +18,13 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.562.0",
     "mongodb": "^7.0.0",
     "mongoose": "^8.20.0",
     "mongoose-sequence": "^6.0.1",
+    "multer": "^2.0.2",
+    "react-router-dom": "^7.11.0",
+    "recharts": "^3.6.0",
     "validator": "^13.15.23"
   }
 }

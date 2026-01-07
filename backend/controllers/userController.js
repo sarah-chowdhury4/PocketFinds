@@ -72,4 +72,65 @@ const signupUser = async (req, res) => {
     }
 };
 
-export { loginUser, signupUser };
+// get user profile
+const getUserProfile = async (req, res) => {
+    try {
+        const userId = req.user.uid; // from auth middleware
+        const user = await User.findById(userId).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // fetch role-specific data
+        let roleData = null;
+        if (user.type === 'customer') {
+            roleData = await Customer.findById(userId).select('-password');
+        } else if (user.type === 'admin') {
+            roleData = await Admin.findById(userId).select('-password');
+        } else if (user.type === 'stall owner') {
+            roleData = await StallOwner.findById(userId).select('-password');
+        }
+
+        res.status(200).json({ user: roleData || user });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// update user profile
+const updateUserProfile = async (req, res) => {
+    try {
+        const userId = req.user.uid; // from auth middleware
+        const updates = req.body;
+
+        // prevent changing sensitive fields
+        delete updates.password;
+        delete updates.email;
+        delete updates.type;
+        delete updates._id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // update based on role
+        let updatedUser;
+        if (user.type === 'customer') {
+            updatedUser = await Customer.findByIdAndUpdate(userId, updates, { new: true, runValidators: true }).select('-password');
+        } else if (user.type === 'admin') {
+            updatedUser = await Admin.findByIdAndUpdate(userId, updates, { new: true, runValidators: true }).select('-password');
+        } else if (user.type === 'stall owner') {
+            updatedUser = await StallOwner.findByIdAndUpdate(userId, updates, { new: true, runValidators: true }).select('-password');
+        } else {
+            updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true, runValidators: true }).select('-password');
+        }
+
+        res.status(200).json({ user: updatedUser });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+export { loginUser, signupUser, getUserProfile, updateUserProfile };

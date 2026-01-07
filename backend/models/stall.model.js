@@ -30,8 +30,30 @@ const stallSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-
-    items: [] // the menu
+    stall_image: {
+        type: String,
+        required: false
+    },
+    coordinates: {
+        lat: {
+            type: Number,
+            required: false
+        },
+        lng: {
+            type: Number,
+            required: false
+        }
+    },
+    is_active: {
+        type: Boolean,
+        default: true,
+        required: true
+    },
+    report_count: {
+        type: Number,
+        default: 0,
+        required: false
+    }
 }, {
     timestamps: true // shows created_at, updated_at time
 });

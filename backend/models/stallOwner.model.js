@@ -7,6 +7,11 @@ const stallOwnerSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    owned_stall: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Stall',
+        required: false
+    }
 }, {
     timestamps: true // shows created_at, updated_at time
 });
